@@ -20,13 +20,18 @@ from waveshare_epd import epd7in5_V2
 
 def generate_frame(in_filename, out_filename, time, width, height):    
     (
-        ffmpeg
-        .input(in_filename, ss=time)
-        .filter('scale', width, height, force_original_aspect_ratio=1)
-        .filter('pad', width, height, -1, -1)
-        .output(out_filename, vframes=1)              
-        .overwrite_output()
-        .run(capture_stdout=True, capture_stderr=True)
+        try:
+            ffmpeg
+            .input(in_filename, ss=time)
+            .filter('scale', width, height, force_original_aspect_ratio=1)
+            .filter('pad', width, height, -1, -1)
+            .output(out_filename, vframes=1)              
+            .overwrite_output()
+            .run(capture_stdout=True, capture_stderr=True)
+        except ffmpeg.Error as e:
+            print('stdout:', e.stdout.decode('utf8'))
+            print('stderr:', e.stderr.decode('utf8'))
+            raise e
     )
 
 def check_mp4(value):
