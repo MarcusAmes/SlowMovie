@@ -21,11 +21,12 @@ timer = Event()
 # timer handling
 def timer_start():
     while not timer.is_set():
-        timer.wait(frameDelay)
+        timer.wait(30.0)
+    timer.clear()
 
 def timer_quit(signum, stack):
     timer.set()
-    timer.clear()
+    print_to_stdout("skipping")
 
 
 signal.signal(signal.SIGUSR1, timer_quit)
