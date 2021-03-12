@@ -215,10 +215,9 @@ while 1:
 
 #     epd.sleep()
     for i in range(frameDelay):
-        if(sys.stdin.len() > skips) {
+        if sys.stdin.len() > skips:
             skips = skips + 1
             break
-        }
         time.sleep(1)
     time.sleep(frameDelay)
     epd.init()
