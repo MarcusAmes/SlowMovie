@@ -166,6 +166,8 @@ inputVid = viddir + currentVideo
 frameCount = int(ffmpeg.probe(inputVid)['streams'][0]['nb_frames'])
 print_to_stdout("there are %d frames in this video" % frameCount)
 
+skips = 0
+
 while 1: 
 
     if args.random:
@@ -212,6 +214,12 @@ while 1:
     
 
 #     epd.sleep()
+    for(i in frameDelay):
+        if(sys.stdin.len() > skips) {
+            skips = skips + 1
+            break:
+        }
+        time.sleep(1)
     time.sleep(frameDelay)
     epd.init()
 
