@@ -220,7 +220,6 @@ while 1:
             skips = skips + 1
             break
         time.sleep(1)
-    time.sleep(frameDelay)
     epd.init()
 
 
