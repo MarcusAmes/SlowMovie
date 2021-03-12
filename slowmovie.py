@@ -35,6 +35,10 @@ def generate_frame(in_filename, out_filename, time, width, height):
         raise e
 
 
+def print_to_stdout(*a):
+    print(*a, file=sys.stdout)
+
+
 def check_mp4(value):
     if not value.endswith('.mp4'):
         raise argparse.ArgumentTypeError("%s should be an .mp4 file" % value)
@@ -59,20 +63,20 @@ parser.add_argument('-s', '--start',
 args = parser.parse_args()
 
 frameDelay = float(args.delay)
-print("Frame Delay = %f" %frameDelay )
+print_to_stdout("Frame Delay = %f" % frameDelay)
 
 increment = float(args.inc)
-print("Increment = %f" %increment )
+print_to_stdout("Increment = %f" % increment)
 
 if args.random:
-    print("In random mode")
+    print_to_stdout("In random mode")
 else: 
-    print ("In play-through mode")
+    print_to_stdout("In play-through mode")
     
 if args.file: 
-    print('Try to start playing %s' %args.file)
+    print_to_stdout('Try to start playing %s' % args.file)
 else: 
-    print ("Continue playing existing file")
+    print_to_stdout("Continue playing existing file")
 
 # Scan through video folder until you find an .mp4 file 
 currentVideo = ""
@@ -99,14 +103,14 @@ for file in os.listdir(viddir):
         videoExists = 1
 
 if videoExists > 0:  
-    print("The current video is %s" %currentVideo)
+    print_to_stdout("The current video is %s" % currentVideo)
 elif videoExists == 0: 
-    print('error')
+    print_to_stdout('error')
     currentVideo = os.listdir(viddir)[0]
     f = open('nowPlaying', 'w')
     f.write(currentVideo)
     f.close() 
-    print("The current video is %s" %currentVideo)
+    print_to_stdout("The current video is %s" % currentVideo)
 
 movieList = []
 
@@ -123,15 +127,15 @@ for file in os.listdir(viddir):
             log.write("0")
             log.close()
 
-print (movieList)
+print_to_stdout(movieList)
 
 if args.file: 
     if args.file in movieList:
         currentVideo = args.file
     else: 
-        print ('%s not found' %args.file)
+        print_to_stdout('%s not found' % args.file)
 
-print("The current video is %s" %currentVideo)
+print_to_stdout("The current video is %s" % currentVideo)
 
 # Ensure this is the correct driver for your particular screen 
 epd = epd7in5_V2.EPD()
@@ -149,7 +153,7 @@ for line in log:
     currentPosition = float(line)
 
 if args.start:
-    print('Start at frame %f' %float(args.start))
+    print_to_stdout('Start at frame %f' % float(args.start))
     currentPosition = float(args.start)
 
 # Ensure this matches your particular screen 
@@ -160,7 +164,7 @@ inputVid = viddir + currentVideo
 
 # Check how many frames are in the movie 
 frameCount = int(ffmpeg.probe(inputVid)['streams'][0]['nb_frames'])
-print("there are %d frames in this video" %frameCount)
+print_to_stdout("there are %d frames in this video" % frameCount)
 
 while 1: 
 
@@ -182,7 +186,7 @@ while 1:
 
     # display the image 
     epd.display(epd.getbuffer(pil_im))
-    print('Diplaying frame %d of %s' %(frame,currentVideo))
+    print_to_stdout('Diplaying frame %d of %s' % (frame, currentVideo))
     
     currentPosition = currentPosition + increment 
     if currentPosition >= frameCount:
