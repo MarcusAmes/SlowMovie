@@ -214,10 +214,10 @@ while 1:
     
 
 #     epd.sleep()
-    for(i in frameDelay):
+    for i in range(frameDelay):
         if(sys.stdin.len() > skips) {
             skips = skips + 1
-            break:
+            break
         }
         time.sleep(1)
     time.sleep(frameDelay)
