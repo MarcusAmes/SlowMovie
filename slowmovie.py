@@ -19,16 +19,16 @@ from threading import Event
 timer = Event()
 
 # timer handling
-def timerStart():
+def timer_start():
     while not timer.is_set():
         timer.wait(args.delay)
 
-def timerQuit():
+def timer_quit():
     timer.set()
     timer.clear()
 
 
-signal.signal(signal.SIGUSR1, timerQuit())
+signal.signal(signal.SIGUSR1, timer_quit)
 
 # Ensure this is the correct import for your particular screen 
 from waveshare_epd import epd7in5_V2
@@ -227,7 +227,7 @@ while 1:
     
 
 #     epd.sleep()
-    timerStart()
+    timer_start()
     epd.init()
 
 
