@@ -10,10 +10,25 @@
 # ** Waveshare library   **
 # *************************
 
-import os, time, sys, random 
+import os, time, sys, random, signal
 from PIL import Image
 import ffmpeg
 import argparse
+from threading import Event
+
+timer = Event()
+
+# timer handling
+def timerStart():
+    while not timer.is_set():
+        timer.wait(args.delay)
+
+def timerQuit():
+    timer.set()
+    timer.clear()
+
+
+signal.signal(signal.SIGUSR1, timerQuit())
 
 # Ensure this is the correct import for your particular screen 
 from waveshare_epd import epd7in5_V2
@@ -166,8 +181,6 @@ inputVid = viddir + currentVideo
 frameCount = int(ffmpeg.probe(inputVid)['streams'][0]['nb_frames'])
 print_to_stdout("there are %d frames in this video" % frameCount)
 
-skips = 0
-
 while 1: 
 
     if args.random:
@@ -214,13 +227,7 @@ while 1:
     
 
 #     epd.sleep()
-    for i in range(int(frameDelay)):
-        inData = sys.stdin.readlines()
-        print_to_stdout(len(inData))
-        if len(inData) > skips:
-            skips = skips + 1
-            break
-        time.sleep(1)
+    timerStart()
     epd.init()
 
 
