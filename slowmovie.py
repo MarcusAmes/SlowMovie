@@ -20,8 +20,7 @@ timer = Event()
 
 # timer handling
 def timer_start():
-    while not timer.is_set():
-        timer.wait(30.0)
+    timer.wait(frameDelay)
     timer.clear()
 
 def timer_quit(signum, stack):
