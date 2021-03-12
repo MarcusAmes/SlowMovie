@@ -21,9 +21,9 @@ timer = Event()
 # timer handling
 def timer_start():
     while not timer.is_set():
-        timer.wait(args.delay)
+        timer.wait(frameDelay)
 
-def timer_quit():
+def timer_quit(signum, stack):
     timer.set()
     timer.clear()
 
