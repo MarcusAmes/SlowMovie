@@ -69,9 +69,9 @@ parser.add_argument('-r', '--random', action='store_true',
     help="Random mode: chooses a random frame every refresh")
 parser.add_argument('-f', '--file', type=check_mp4,
     help="Add a filename to start playing a specific film. Otherwise will pick a random file, and will move to another film randomly afterwards.")
-parser.add_argument('-d', '--delay',  default=120, 
+parser.add_argument('-d', '--delay',  default=360, 
     help="Delay between screen updates, in seconds")
-parser.add_argument('-i', '--inc',  default=4, 
+parser.add_argument('-i', '--inc',  default=12, 
     help="Number of frames skipped between screen updates")
 parser.add_argument('-s', '--start',  
     help="Start at a specific frame")
@@ -203,22 +203,20 @@ while 1:
     epd.display(epd.getbuffer(pil_im))
     print_to_stdout('Diplaying frame %d of %s' % (frame, currentVideo))
     
-    currentPosition = currentPosition + increment 
-    if currentPosition >= frameCount:
-        currentPosition = 0
+    if not args.random:
+        currentPosition = currentPosition + increment 
+        if currentPosition >= frameCount:
+            currentPosition = 0
+        
+            thisVideo = movieList.index(currentVideo)
+            if thisVideo < len(movieList)-1:
+                currentVideo = movieList[thisVideo+1]
+            else:
+                currentVideo = movieList[0]
+
         log = open(logdir + '%s<progress'%currentVideo, 'w')
         log.write(str(currentPosition))
         log.close() 
-    
-        thisVideo = movieList.index(currentVideo)
-        if thisVideo < len(movieList)-1:
-            currentVideo = movieList[thisVideo+1]
-        else:
-            currentVideo = movieList[0]
-
-    log = open(logdir + '%s<progress'%currentVideo, 'w')
-    log.write(str(currentPosition))
-    log.close() 
 
 
     f = open('nowPlaying', 'w')
