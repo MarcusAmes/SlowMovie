@@ -3,4 +3,4 @@ import sys
 epd = epd7in5_V2.EPD()
 epd.init()
 epd.Clear()
-sys.exit("Done")
+sys.exit(0)
